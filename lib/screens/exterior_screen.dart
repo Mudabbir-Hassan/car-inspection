@@ -84,6 +84,13 @@ class _ExteriorScreenState extends State<ExteriorScreen>
         CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
     _animationController.forward();
 
+    // Update current screen immediately when initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<InspectionProvider>(context, listen: false);
+      provider.updateCurrentScreen('/exterior');
+      print('ExteriorScreen: Updated current screen to /exterior in initState');
+    });
+
     // Initialize all scores to 50%
     for (var item in _conditionItems) {
       _conditionScores[item['key']] = 50.0;
@@ -141,15 +148,43 @@ class _ExteriorScreenState extends State<ExteriorScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Ensure current screen is set when building
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<InspectionProvider>(context, listen: false);
+      if (provider.currentScreen != '/exterior') {
+        provider.updateCurrentScreen('/exterior');
+        print('ExteriorScreen: Updated current screen to /exterior');
+      }
+    });
+
     return WillPopScope(
       onWillPop: () async {
         _saveData();
         return true;
       },
       child: Scaffold(
-        appBar: const CustomAppBar(
+        appBar: CustomAppBar(
           title: 'Vehicle Condition & Inspection',
           showBack: true,
+          actions: [
+            TextButton(
+              onPressed: () {
+                _saveData();
+                final provider =
+                    Provider.of<InspectionProvider>(context, listen: false);
+                provider.updateCurrentScreen('/legal');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TokenTaxScreen(),
+                  ),
+                );
+              },
+              child: const Text('Skip',
+                  style: TextStyle(
+                      color: Color(0xFF00BFA6), fontWeight: FontWeight.bold)),
+            ),
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -158,7 +193,7 @@ class _ExteriorScreenState extends State<ExteriorScreen>
             child: ListView(
               children: [
                 const ProgressSteps(
-                  currentStep: 2,
+                  currentStep: 1,
                   steps: [
                     'Ownership',
                     'Condition',
@@ -329,6 +364,9 @@ class _ExteriorScreenState extends State<ExteriorScreen>
                   label: 'Next: Legal Details',
                   onPressed: () {
                     _saveData();
+                    final provider =
+                        Provider.of<InspectionProvider>(context, listen: false);
+                    provider.updateCurrentScreen('/legal');
                     Navigator.push(
                       context,
                       MaterialPageRoute(

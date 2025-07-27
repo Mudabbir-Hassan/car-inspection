@@ -60,6 +60,13 @@ class _TokenTaxScreenState extends State<TokenTaxScreen>
         CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
     _animationController.forward();
 
+    // Update current screen immediately when initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<InspectionProvider>(context, listen: false);
+      provider.updateCurrentScreen('/legal');
+      print('TokenTaxScreen: Updated current screen to /legal in initState');
+    });
+
     // Initialize controllers for each field
     for (var question in _questions) {
       _controllers[question['key']] = TextEditingController();
@@ -73,6 +80,10 @@ class _TokenTaxScreenState extends State<TokenTaxScreen>
       for (var question in _questions) {
         _controllers[question['key']]!.text = _answers[question['key']] ?? '';
       }
+      // Update current screen
+      provider.updateCurrentScreen('/legal');
+      print('TokenTaxScreen: Updated current screen to /legal');
+      print('TokenTaxScreen: Current screen is now ${provider.currentScreen}');
       setState(() {});
     });
   }
@@ -100,6 +111,15 @@ class _TokenTaxScreenState extends State<TokenTaxScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Ensure current screen is set when building
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<InspectionProvider>(context, listen: false);
+      if (provider.currentScreen != '/legal') {
+        provider.updateCurrentScreen('/legal');
+        print('TokenTaxScreen: Force updated current screen to /legal');
+      }
+    });
+
     return WillPopScope(
       onWillPop: () async {
         _saveData();
@@ -113,6 +133,9 @@ class _TokenTaxScreenState extends State<TokenTaxScreen>
             TextButton(
               onPressed: () {
                 _saveData();
+                final provider =
+                    Provider.of<InspectionProvider>(context, listen: false);
+                provider.updateCurrentScreen('/summary');
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -133,7 +156,7 @@ class _TokenTaxScreenState extends State<TokenTaxScreen>
             child: ListView(
               children: [
                 const ProgressSteps(
-                  currentStep: 3,
+                  currentStep: 2,
                   steps: [
                     'Ownership',
                     'Condition',
@@ -196,6 +219,9 @@ class _TokenTaxScreenState extends State<TokenTaxScreen>
                   label: 'Next: Instructions',
                   onPressed: () {
                     _saveData();
+                    final provider =
+                        Provider.of<InspectionProvider>(context, listen: false);
+                    provider.updateCurrentScreen('/instructions');
                     Navigator.pushReplacementNamed(context, '/instructions');
                   },
                 ),

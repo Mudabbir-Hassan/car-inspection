@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'dart:io';
 import '../widgets/app_bar.dart';
 import '../widgets/primary_button.dart';
+import '../widgets/progress_steps.dart';
 import '../models/car_mark.dart';
 import 'dart:ui'; // Added for BackdropFilter
 import 'package:pdf/pdf.dart'; // Added for PdfColors
@@ -64,78 +65,131 @@ class SummaryScreen extends StatelessWidget {
       Map<String, String> answers, List<CarMark> carMarks) async {
     final pdf = pw.Document();
 
-    // Load car images
-    final topImage = await _loadImage('assets/images/top.png');
-    final leftImage = await _loadImage('assets/images/left.png');
-    final rightImage = await _loadImage('assets/images/right.png');
-    final frontImage = await _loadImage('assets/images/front.png');
-    final backImage = await _loadImage('assets/images/back.png');
+    // Load car image
+    final carImage = await _loadImage('assets/images/car-image.jpeg');
 
-    // Page 1: Header and Basic Vehicle Details
+    // Page 1: Professional Header and Basic Vehicle Details
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
-        margin: const pw.EdgeInsets.all(40),
+        margin: const pw.EdgeInsets.all(30),
         build: (context) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            // Header
-            pw.Text('Hassan Motors', style: pw.TextStyle(fontSize: 24)),
-            pw.Text('Vehicle Inspection Report',
-                style: pw.TextStyle(fontSize: 16)),
-            pw.Text('Date: ${DateTime.now().toString().split(' ')[0]}',
-                style: pw.TextStyle(fontSize: 12)),
-            pw.SizedBox(height: 30),
-
-            // Title
-            pw.Center(
-              child: pw.Text(
-                'COMPREHENSIVE VEHICLE INSPECTION REPORT',
-                style: pw.TextStyle(fontSize: 20),
-                textAlign: pw.TextAlign.center,
+            // Professional Header
+            pw.Container(
+              padding: const pw.EdgeInsets.all(20),
+              decoration: pw.BoxDecoration(
+                color: PdfColors.blue900,
+                borderRadius: pw.BorderRadius.circular(10),
+              ),
+              child: pw.Column(
+                children: [
+                  pw.Text(
+                    'HASSAN MOTORS',
+                    style: pw.TextStyle(
+                      fontSize: 28,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColors.white,
+                    ),
+                  ),
+                  pw.SizedBox(height: 5),
+                  pw.Text(
+                    '63- Main Road Samnabad, Lahore',
+                    style: pw.TextStyle(
+                      fontSize: 14,
+                      color: PdfColors.white,
+                    ),
+                  ),
+                  pw.SizedBox(height: 10),
+                  pw.Text(
+                    'COMPREHENSIVE VEHICLE INSPECTION REPORT',
+                    style: pw.TextStyle(
+                      fontSize: 18,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColors.white,
+                    ),
+                  ),
+                  pw.SizedBox(height: 5),
+                  pw.Text(
+                    'Date: ${DateTime.now().toString().split(' ')[0]}',
+                    style: pw.TextStyle(
+                      fontSize: 12,
+                      color: PdfColors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
             pw.SizedBox(height: 30),
 
-            // Basic Vehicle Details
-            pw.Text('Basic Vehicle Details', style: pw.TextStyle(fontSize: 16)),
-            pw.SizedBox(height: 10),
-            ..._allQuestions.entries
-                .where((e) => [
-                      'ownerName',
-                      'contact',
-                      'cnic',
-                      'yearManufacturing',
-                      'yearImport',
-                      'yearRegistration',
-                      'make',
-                      'model',
-                      'type',
-                      'carName',
-                      'customerDealerName',
-                      'engineCapacity',
-                      'mileage',
-                      'fuelType',
-                      'inspectionDate',
-                      'chassis',
-                      'engine',
-                      'registration',
-                      'previousOwners'
-                    ].contains(e.key))
-                .map((e) => pw.Container(
-                      margin: const pw.EdgeInsets.only(bottom: 8),
-                      child: pw.Row(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Text('${e.value}: ',
-                              style: pw.TextStyle(fontSize: 12)),
-                          pw.Expanded(
-                            child: pw.Text(_getAnswer(e.key, answers),
-                                style: pw.TextStyle(fontSize: 12)),
-                          ),
-                        ],
-                      ),
-                    )),
+            // Basic Vehicle Details Section
+            pw.Container(
+              padding: const pw.EdgeInsets.all(15),
+              decoration: pw.BoxDecoration(
+                color: PdfColors.grey100,
+                borderRadius: pw.BorderRadius.circular(8),
+                border: pw.Border.all(color: PdfColors.grey300),
+              ),
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text(
+                    'VEHICLE DETAILS',
+                    style: pw.TextStyle(
+                      fontSize: 16,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColors.blue900,
+                    ),
+                  ),
+                  pw.SizedBox(height: 15),
+                  ..._allQuestions.entries
+                      .where((e) => [
+                            'ownerName',
+                            'contact',
+                            'cnic',
+                            'yearManufacturing',
+                            'yearImport',
+                            'yearRegistration',
+                            'make',
+                            'model',
+                            'type',
+                            'carName',
+                            'customerDealerName',
+                            'engineCapacity',
+                            'mileage',
+                            'fuelType',
+                            'inspectionDate',
+                            'chassis',
+                            'engine',
+                            'registration',
+                            'previousOwners'
+                          ].contains(e.key))
+                      .map((e) => pw.Container(
+                            margin: const pw.EdgeInsets.only(bottom: 8),
+                            child: pw.Row(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text(
+                                  '${e.value}: ',
+                                  style: pw.TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: PdfColors.grey800,
+                                  ),
+                                ),
+                                pw.Expanded(
+                                  child: pw.Text(
+                                    _getAnswer(e.key, answers),
+                                    style: pw.TextStyle(fontSize: 12),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -145,33 +199,68 @@ class SummaryScreen extends StatelessWidget {
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
-        margin: const pw.EdgeInsets.all(40),
+        margin: const pw.EdgeInsets.all(30),
         build: (context) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            pw.Text('Legal & Tax Details', style: pw.TextStyle(fontSize: 18)),
+            // Header
+            pw.Container(
+              padding: const pw.EdgeInsets.all(15),
+              decoration: pw.BoxDecoration(
+                color: PdfColors.blue900,
+                borderRadius: pw.BorderRadius.circular(10),
+              ),
+              child: pw.Text(
+                'LEGAL & TAX DETAILS',
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
+                ),
+              ),
+            ),
             pw.SizedBox(height: 20),
-            ..._allQuestions.entries
-                .where((e) => [
-                      'challans',
-                      'tokenTax',
-                      'ciaClearance',
-                      'biometricVerification'
-                    ].contains(e.key))
-                .map((e) => pw.Container(
-                      margin: const pw.EdgeInsets.only(bottom: 12),
-                      child: pw.Row(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Text('${e.value}: ',
-                              style: pw.TextStyle(fontSize: 14)),
-                          pw.Expanded(
-                            child: pw.Text(_getAnswer(e.key, answers),
-                                style: pw.TextStyle(fontSize: 14)),
-                          ),
-                        ],
-                      ),
-                    )),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(15),
+              decoration: pw.BoxDecoration(
+                color: PdfColors.grey100,
+                borderRadius: pw.BorderRadius.circular(8),
+                border: pw.Border.all(color: PdfColors.grey300),
+              ),
+              child: pw.Column(
+                children: [
+                  ..._allQuestions.entries
+                      .where((e) => [
+                            'challans',
+                            'tokenTax',
+                            'ciaClearance',
+                            'biometricVerification'
+                          ].contains(e.key))
+                      .map((e) => pw.Container(
+                            margin: const pw.EdgeInsets.only(bottom: 12),
+                            child: pw.Row(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text(
+                                  '${e.value}: ',
+                                  style: pw.TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: PdfColors.grey800,
+                                  ),
+                                ),
+                                pw.Expanded(
+                                  child: pw.Text(
+                                    _getAnswer(e.key, answers),
+                                    style: pw.TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -181,38 +270,72 @@ class SummaryScreen extends StatelessWidget {
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
-        margin: const pw.EdgeInsets.all(40),
+        margin: const pw.EdgeInsets.all(30),
         build: (context) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            pw.Text('Vehicle Condition & Inspection',
-                style: pw.TextStyle(fontSize: 18)),
+            // Header
+            pw.Container(
+              padding: const pw.EdgeInsets.all(15),
+              decoration: pw.BoxDecoration(
+                color: PdfColors.blue900,
+                borderRadius: pw.BorderRadius.circular(10),
+              ),
+              child: pw.Text(
+                'VEHICLE CONDITION & INSPECTION',
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
+                ),
+              ),
+            ),
             pw.SizedBox(height: 20),
-            ..._allQuestions.entries
-                .where((e) => [
-                      'engineTransmissionClutch',
-                      'brakes',
-                      'suspensionSteering',
-                      'interiorCondition',
-                      'acHeater',
-                      'electricalElectronics',
-                      'exteriorBody',
-                      'tyresCondition'
-                    ].contains((e) => e.key))
-                .map((e) => pw.Container(
-                      margin: const pw.EdgeInsets.only(bottom: 12),
-                      child: pw.Row(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Text('${e.value}: ',
-                              style: pw.TextStyle(fontSize: 14)),
-                          pw.Expanded(
-                            child: pw.Text(_getAnswer(e.key, answers),
-                                style: pw.TextStyle(fontSize: 14)),
-                          ),
-                        ],
-                      ),
-                    )),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(15),
+              decoration: pw.BoxDecoration(
+                color: PdfColors.grey100,
+                borderRadius: pw.BorderRadius.circular(8),
+                border: pw.Border.all(color: PdfColors.grey300),
+              ),
+              child: pw.Column(
+                children: [
+                  ..._allQuestions.entries
+                      .where((e) => [
+                            'engineTransmissionClutch',
+                            'brakes',
+                            'suspensionSteering',
+                            'interiorCondition',
+                            'acHeater',
+                            'electricalElectronics',
+                            'exteriorBody',
+                            'tyresCondition'
+                          ].contains(e.key))
+                      .map((e) => pw.Container(
+                            margin: const pw.EdgeInsets.only(bottom: 12),
+                            child: pw.Row(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text(
+                                  '${e.value}: ',
+                                  style: pw.TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: PdfColors.grey800,
+                                  ),
+                                ),
+                                pw.Expanded(
+                                  child: pw.Text(
+                                    _getAnswer(e.key, answers),
+                                    style: pw.TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -222,46 +345,85 @@ class SummaryScreen extends StatelessWidget {
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
-        margin: const pw.EdgeInsets.all(40),
+        margin: const pw.EdgeInsets.all(30),
         build: (context) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            pw.Text('Painted Areas and Damage Markings',
-                style: pw.TextStyle(fontSize: 18)),
-            pw.SizedBox(height: 20),
-            pw.Text('Marking Summary:', style: pw.TextStyle(fontSize: 16)),
-            pw.SizedBox(height: 10),
-            pw.Text('Total marks: ${carMarks.length}',
-                style: pw.TextStyle(fontSize: 14)),
-            pw.Text(
-                'Paint issues: ${carMarks.where((m) => m.color == Colors.orange).length}',
-                style: pw.TextStyle(fontSize: 14)),
-            pw.Text(
-                'Accident damage: ${carMarks.where((m) => m.color == Colors.red).length}',
-                style: pw.TextStyle(fontSize: 14)),
+            // Header
+            pw.Container(
+              padding: const pw.EdgeInsets.all(15),
+              decoration: pw.BoxDecoration(
+                color: PdfColors.blue900,
+                borderRadius: pw.BorderRadius.circular(10),
+              ),
+              child: pw.Text(
+                'DAMAGE & PAINT MARKINGS',
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
+                ),
+              ),
+            ),
             pw.SizedBox(height: 20),
 
-            // Car Images Grid
-            pw.Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: [
-                _createPdfImageWithMarks(
-                    'Top View', topImage, carMarks, 'assets/images/top.png'),
-                _createPdfImageWithMarks(
-                    'Left Side', leftImage, carMarks, 'assets/images/left.png'),
-                _createPdfImageWithMarks('Right Side', rightImage, carMarks,
-                    'assets/images/right.png'),
-                _createPdfImageWithMarks('Front View', frontImage, carMarks,
-                    'assets/images/front.png'),
-                _createPdfImageWithMarks(
-                    'Back View', backImage, carMarks, 'assets/images/back.png'),
-              ],
+            // Marking Summary
+            pw.Container(
+              padding: const pw.EdgeInsets.all(15),
+              decoration: pw.BoxDecoration(
+                color: PdfColors.grey100,
+                borderRadius: pw.BorderRadius.circular(8),
+                border: pw.Border.all(color: PdfColors.grey300),
+              ),
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text(
+                    'Marking Summary:',
+                    style: pw.TextStyle(
+                      fontSize: 16,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColors.grey800,
+                    ),
+                  ),
+                  pw.SizedBox(height: 10),
+                  pw.Text(
+                    'Total marks: ${carMarks.length}',
+                    style: pw.TextStyle(fontSize: 14),
+                  ),
+                  pw.Text(
+                    'Yellow highlights: ${carMarks.where((m) => m.color == Colors.yellow).length}',
+                    style: pw.TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+            pw.SizedBox(height: 20),
+
+            // Car Image with Markings
+            pw.Center(
+              child: _createPdfImageWithMarks('Car Image', carImage, carMarks,
+                  'assets/images/car-image.jpeg'),
             ),
 
             pw.SizedBox(height: 30),
-            pw.Text('Generated by Hassan Motors Inspection App',
-                style: pw.TextStyle(fontSize: 10)),
+
+            // Footer
+            pw.Container(
+              padding: const pw.EdgeInsets.all(15),
+              decoration: pw.BoxDecoration(
+                color: PdfColors.grey200,
+                borderRadius: pw.BorderRadius.circular(8),
+              ),
+              child: pw.Text(
+                'Generated by Hassan Motors Inspection App - ${DateTime.now().toString().split(' ')[0]}',
+                style: pw.TextStyle(
+                  fontSize: 10,
+                  color: PdfColors.grey600,
+                ),
+                textAlign: pw.TextAlign.center,
+              ),
+            ),
           ],
         ),
       ),
@@ -272,9 +434,15 @@ class SummaryScreen extends StatelessWidget {
 
   Future<pw.MemoryImage?> _loadImage(String path) async {
     try {
+      print('PDF: Loading image from path: $path');
       final data = await rootBundle.load(path);
-      return pw.MemoryImage(data.buffer.asUint8List());
+      print(
+          'PDF: Image data loaded successfully, size: ${data.lengthInBytes} bytes');
+      final memoryImage = pw.MemoryImage(data.buffer.asUint8List());
+      print('PDF: MemoryImage created successfully');
+      return memoryImage;
     } catch (e) {
+      print('PDF: Error loading image: $e');
       return null;
     }
   }
@@ -295,7 +463,10 @@ class SummaryScreen extends StatelessWidget {
 
         // Update current screen to summary when reaching this screen
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          provider.updateCurrentScreen('/summary');
+          if (provider.currentScreen != '/summary') {
+            provider.updateCurrentScreen('/summary');
+            print('SummaryScreen: Updated current screen to /summary');
+          }
         });
 
         return Scaffold(
@@ -304,51 +475,38 @@ class SummaryScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: ListView(
               children: [
+                // Progress Steps
+                const ProgressSteps(
+                  currentStep: 5,
+                  steps: [
+                    'Ownership',
+                    'Condition',
+                    'Legal',
+                    'Instructions',
+                    'Images',
+                    'Summary'
+                  ],
+                ),
+                const SizedBox(height: 16),
                 const Text(
                   'Review your inspection:',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
 
-                // Car Images Section
+                // Car Image Section
                 const Text(
-                  'Car Images with Markings:',
+                  'Car Image with Markings:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
                 SizedBox(
-                  height: 120,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      _MarkedImageCard('Top View', 'assets/images/top.png',
-                          _getMarksForImage('assets/images/top.png', carMarks)),
-                      const SizedBox(width: 12),
-                      _MarkedImageCard(
-                          'Left Side',
-                          'assets/images/left.png',
-                          _getMarksForImage(
-                              'assets/images/left.png', carMarks)),
-                      const SizedBox(width: 12),
-                      _MarkedImageCard(
-                          'Right Side',
-                          'assets/images/right.png',
-                          _getMarksForImage(
-                              'assets/images/right.png', carMarks)),
-                      const SizedBox(width: 12),
-                      _MarkedImageCard(
-                          'Front View',
-                          'assets/images/front.png',
-                          _getMarksForImage(
-                              'assets/images/front.png', carMarks)),
-                      const SizedBox(width: 12),
-                      _MarkedImageCard(
-                          'Back View',
-                          'assets/images/back.png',
-                          _getMarksForImage(
-                              'assets/images/back.png', carMarks)),
-                    ],
-                  ),
+                  height: 200,
+                  child: _MarkedImageCard(
+                      'Car Image',
+                      'assets/images/car-image.jpeg',
+                      _getMarksForImage(
+                          'assets/images/car-image.jpeg', carMarks)),
                 ),
 
                 const SizedBox(height: 24),
@@ -516,10 +674,34 @@ class SummaryScreen extends StatelessWidget {
     final imageMarks =
         marks.where((mark) => mark.imagePath == imagePath).toList();
 
+    // Use a reasonable PDF size that fits on the page while maintaining aspect ratio
+    final firstMark = imageMarks.isNotEmpty ? imageMarks.first : null;
+    final originalWidth = firstMark?.imageWidth ?? 400.0;
+    final originalHeight = firstMark?.imageHeight ?? 300.0;
+
+    // Scale down to fit PDF page while maintaining aspect ratio
+    final maxWidth = 550.0;
+    final maxHeight = 580.0;
+    final scaleX = maxWidth / originalWidth;
+    final scaleY = maxHeight / originalHeight;
+    final scale = scaleX < scaleY ? scaleX : scaleY;
+
+    final pdfContainerWidth = originalWidth * scale;
+    final pdfContainerHeight = originalHeight * scale;
+
+    print('PDF: Creating image for $title with ${imageMarks.length} marks');
+    print('PDF: Image object: $image');
+    print(
+        'PDF: Container dimensions: ${pdfContainerWidth} x ${pdfContainerHeight}');
+    for (var mark in imageMarks) {
+      print('PDF: Mark position: ${mark.position.dx}, ${mark.position.dy}');
+      print('PDF: Stored dimensions: ${mark.imageWidth} x ${mark.imageHeight}');
+    }
+
     if (image == null) {
       return pw.Container(
-        width: 150,
-        height: 120,
+        width: 400,
+        height: 300,
         decoration: pw.BoxDecoration(
           border: pw.Border.all(color: PdfColors.grey300),
           borderRadius: pw.BorderRadius.circular(8),
@@ -528,45 +710,79 @@ class SummaryScreen extends StatelessWidget {
         child: pw.Column(
           mainAxisAlignment: pw.MainAxisAlignment.center,
           children: [
-            pw.Text(title, style: pw.TextStyle(fontSize: 12)),
+            pw.Text(title, style: pw.TextStyle(fontSize: 16)),
             pw.Text('${imageMarks.length} marks',
-                style: pw.TextStyle(fontSize: 10)),
+                style: pw.TextStyle(fontSize: 14)),
           ],
         ),
       );
     }
 
     return pw.Container(
-      width: 150,
-      height: 120,
+      width: pdfContainerWidth,
+      height: pdfContainerHeight,
+      decoration: pw.BoxDecoration(
+        border: pw.Border.all(color: PdfColors.grey300),
+        borderRadius: pw.BorderRadius.circular(8),
+      ),
       child: pw.Stack(
         children: [
-          pw.Image(image),
-          ...imageMarks.map((mark) => pw.Positioned(
-                left: mark.position.dx - 5,
-                top: mark.position.dy - 5,
-                child: pw.Container(
-                  width: 10,
-                  height: 10,
-                  decoration: pw.BoxDecoration(
-                    color: mark.color == Colors.red
-                        ? PdfColors.red
-                        : PdfColors.orange,
-                    shape: pw.BoxShape.circle,
-                    border: pw.Border.all(color: PdfColors.white, width: 1),
-                  ),
+          // Use the exact same image display logic as car image screen
+          pw.Center(
+            child: pw.Image(
+              image,
+              width: pdfContainerWidth,
+              height: pdfContainerHeight,
+              fit: pw.BoxFit.contain,
+            ),
+          ),
+          ...imageMarks.map((mark) {
+            // Use exact same simple positioning logic as car image screen
+            final scaledX = mark.position.dx * pdfContainerWidth;
+            final scaledY = mark.position.dy * pdfContainerHeight;
+
+            print(
+                'PDF: Mark percentage: ${mark.position.dx}, ${mark.position.dy}');
+            print(
+                'PDF: Container dimensions: ${pdfContainerWidth} x ${pdfContainerHeight}');
+            print('PDF: Final position: ${scaledX}, ${scaledY}');
+
+            return pw.Positioned(
+              left: scaledX - 12, // Same offset as car image screen
+              top: scaledY - 12,
+              child: pw.Container(
+                width: 24, // Same size as car image screen
+                height: 24,
+                decoration: pw.BoxDecoration(
+                  color: PdfColors.yellow,
+                  shape: pw.BoxShape.circle,
+                  border: pw.Border.all(color: PdfColors.black, width: 2),
                 ),
-              )),
+              ),
+            );
+          }),
+          // Title overlay
           pw.Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: pw.Container(
-              padding: const pw.EdgeInsets.all(4),
-              color: PdfColors.grey800,
+              padding: const pw.EdgeInsets.all(8),
+              decoration: pw.BoxDecoration(
+                color: PdfColors.blue900,
+                borderRadius: const pw.BorderRadius.only(
+                  bottomLeft: pw.Radius.circular(8),
+                  bottomRight: pw.Radius.circular(8),
+                ),
+              ),
               child: pw.Text(
                 '$title (${imageMarks.length} marks)',
-                style: const pw.TextStyle(fontSize: 8, color: PdfColors.white),
+                style: const pw.TextStyle(
+                  fontSize: 12,
+                  color: PdfColors.white,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+                textAlign: pw.TextAlign.center,
               ),
             ),
           ),
@@ -647,23 +863,8 @@ class _SummaryAppBar extends StatelessWidget implements PreferredSizeWidget {
       builder: (context, provider, child) {
         // Determine the last car image screen based on current progress
         String getLastCarImageScreen() {
-          final carScreens = [
-            '/car-top',
-            '/car-left',
-            '/car-right',
-            '/car-front',
-            '/car-back'
-          ];
-          final currentScreen = provider.currentScreen;
-
-          // If current screen is a car screen, go back one step
-          final currentIndex = carScreens.indexOf(currentScreen);
-          if (currentIndex > 0) {
-            return carScreens[currentIndex - 1];
-          }
-
-          // Default to car-back if no specific car screen found
-          return '/car-back';
+          // Since we now only have one car image screen, always return it
+          return '/car-image';
         }
 
         return Material(
@@ -720,179 +921,11 @@ class _MarkedImageCard extends StatelessWidget {
   const _MarkedImageCard(this.title, this.imagePath, this.marks);
 
   void _showImagePopup(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: Dialog(
-            backgroundColor: Colors.transparent,
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.8,
-              decoration: BoxDecoration(
-                color: Colors.grey[900],
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey[700]!),
-              ),
-              child: Column(
-                children: [
-                  // Header
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[800],
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(16)),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF00BFA6),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          icon: const Icon(Icons.close, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Image with pinpoints
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey[600]!),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            return Stack(
-                              children: [
-                                Image.asset(
-                                  imagePath,
-                                  fit: BoxFit.contain,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                ),
-                                ...marks.map((mark) {
-                                  // Calculate the scaled position based on actual image dimensions
-                                  // Get the actual image size from the asset
-                                  final imageWidth =
-                                      300.0; // Approximate original image width
-                                  final imageHeight =
-                                      200.0; // Approximate original image height
-
-                                  // Calculate the scale factors based on the actual container constraints
-                                  final scaleX =
-                                      constraints.maxWidth / imageWidth;
-                                  final scaleY =
-                                      constraints.maxHeight / imageHeight;
-
-                                  // Use the smaller scale to maintain aspect ratio
-                                  final scale =
-                                      scaleX < scaleY ? scaleX : scaleY;
-
-                                  // Calculate the scaled position
-                                  final scaledX = mark.position.dx * scale;
-                                  final scaledY = mark.position.dy * scale;
-
-                                  // Center the image if needed
-                                  final imageOffsetX = (constraints.maxWidth -
-                                          (imageWidth * scale)) /
-                                      2;
-                                  final imageOffsetY = (constraints.maxHeight -
-                                          (imageHeight * scale)) /
-                                      2;
-
-                                  return Positioned(
-                                    left: imageOffsetX + scaledX - 12,
-                                    top: imageOffsetY + scaledY - 12,
-                                    child: Container(
-                                      width: 24,
-                                      height: 24,
-                                      decoration: BoxDecoration(
-                                        color: mark.color.withOpacity(0.8),
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: Colors.white,
-                                          width: 2,
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.3),
-                                            blurRadius: 4,
-                                            offset: const Offset(0, 2),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Legend
-                  if (marks.isNotEmpty)
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[800],
-                        borderRadius: const BorderRadius.vertical(
-                            bottom: Radius.circular(16)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Markings: ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          ...marks.map((mark) => Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: mark.color.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: mark.color),
-                                ),
-                                child: Text(
-                                  mark.color == Colors.red
-                                      ? 'Accident'
-                                      : 'Paint',
-                                  style: TextStyle(
-                                    color: mark.color,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              )),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
+    // Navigate to the car image screen as a popup
+    Navigator.pushNamed(
+      context,
+      '/car-image',
+      arguments: {'isPopup': true},
     );
   }
 
@@ -913,54 +946,8 @@ class _MarkedImageCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(8)),
-                child: Stack(
-                  children: [
-                    Image.asset(imagePath,
-                        fit: BoxFit.cover, width: double.infinity),
-                    ...marks.map((mark) {
-                      // Calculate the scaled position for the small card
-                      final cardWidth = 100.0;
-                      final cardHeight =
-                          80.0; // Approximate height of the image area
-                      final imageWidth = 300.0; // Original image width
-                      final imageHeight = 200.0; // Original image height
-
-                      // Calculate scale for the small card
-                      final scaleX = cardWidth / imageWidth;
-                      final scaleY = cardHeight / imageHeight;
-                      final scale = scaleX < scaleY ? scaleX : scaleY;
-
-                      // Calculate the scaled position
-                      final scaledX = mark.position.dx * scale;
-                      final scaledY = mark.position.dy * scale;
-
-                      // Center the image if needed
-                      final imageOffsetX =
-                          (cardWidth - (imageWidth * scale)) / 2;
-                      final imageOffsetY =
-                          (cardHeight - (imageHeight * scale)) / 2;
-
-                      return Positioned(
-                        left: imageOffsetX +
-                            scaledX -
-                            8, // Smaller offset for small card
-                        top: imageOffsetY + scaledY - 8,
-                        child: Container(
-                          width: 16, // Smaller size for small card
-                          height: 16,
-                          decoration: BoxDecoration(
-                            color: mark.color.withOpacity(0.8),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                  ],
-                ),
+                child: Image.asset(imagePath,
+                    fit: BoxFit.cover, width: double.infinity),
               ),
             ),
             Container(

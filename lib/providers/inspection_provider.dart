@@ -7,12 +7,14 @@ class InspectionProvider extends ChangeNotifier {
   Map<String, String> _formAnswers = {};
   List<CarMark> _carMarks = [];
   String _currentScreen = '/';
+  String _previousScreen = '/';
   bool _hasInProgressData = false;
 
   // Getters
   Map<String, String> get formAnswers => _formAnswers;
   List<CarMark> get carMarks => _carMarks;
   String get currentScreen => _currentScreen;
+  String get previousScreen => _previousScreen;
   bool get hasInProgressData => _hasInProgressData;
 
   // Initialize provider
@@ -36,6 +38,7 @@ class InspectionProvider extends ChangeNotifier {
 
   // Update current screen
   void updateCurrentScreen(String screen) {
+    _previousScreen = _currentScreen;
     _currentScreen = screen;
     _saveData();
     notifyListeners();
@@ -46,6 +49,7 @@ class InspectionProvider extends ChangeNotifier {
     _formAnswers.clear();
     _carMarks.clear();
     _currentScreen = '/';
+    _previousScreen = '/';
     _hasInProgressData = false;
     await _clearStoredData();
     notifyListeners();
@@ -71,6 +75,7 @@ class InspectionProvider extends ChangeNotifier {
 
       // Load current screen
       _currentScreen = prefs.getString('current_screen') ?? '/';
+      _previousScreen = prefs.getString('previous_screen') ?? '/';
 
       // Check if there's in-progress data
       _hasInProgressData = _formAnswers.isNotEmpty || _carMarks.isNotEmpty;
@@ -95,6 +100,7 @@ class InspectionProvider extends ChangeNotifier {
 
       // Save current screen
       await prefs.setString('current_screen', _currentScreen);
+      await prefs.setString('previous_screen', _previousScreen);
     } catch (e) {
       print('Error saving data: $e');
     }
@@ -107,6 +113,7 @@ class InspectionProvider extends ChangeNotifier {
       await prefs.remove('form_answers');
       await prefs.remove('car_marks');
       await prefs.remove('current_screen');
+      await prefs.remove('previous_screen');
     } catch (e) {
       print('Error clearing data: $e');
     }
@@ -120,11 +127,7 @@ class InspectionProvider extends ChangeNotifier {
       '/exterior',
       '/legal',
       '/instructions',
-      '/car-top',
-      '/car-left',
-      '/car-right',
-      '/car-front',
-      '/car-back',
+      '/car-image',
       '/summary'
     ];
 
@@ -138,6 +141,30 @@ class InspectionProvider extends ChangeNotifier {
 
     // Return the next screen in the flow
     return flow[currentIndex + 1];
+  }
+
+  // Get the previous screen based on current progress
+  String getPreviousScreen() {
+    // Define the flow sequence
+    final flow = [
+      '/ownership',
+      '/exterior',
+      '/legal',
+      '/instructions',
+      '/car-image',
+      '/summary'
+    ];
+
+    // Find the current screen in the flow
+    final currentIndex = flow.indexOf(_currentScreen);
+
+    // If current screen is not found or is the first one, go to welcome
+    if (currentIndex == -1 || currentIndex <= 0) {
+      return '/';
+    }
+
+    // Return the previous screen in the flow
+    return flow[currentIndex - 1];
   }
 
   // Check if user has completed the inspection

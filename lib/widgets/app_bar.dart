@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/inspection_provider.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -37,7 +39,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ? IconButton(
                   icon: const Icon(Icons.arrow_back_ios_new_rounded,
                       color: Color(0xFF00BFA6)),
-                  onPressed: () => Navigator.of(context).maybePop(),
+                  onPressed: () {
+                    final provider =
+                        Provider.of<InspectionProvider>(context, listen: false);
+                    final previousScreen = provider.getPreviousScreen();
+                    final currentRoute =
+                        ModalRoute.of(context)?.settings.name ?? 'unknown';
+                    print('Back button pressed');
+                    print('Current route: $currentRoute');
+                    print('Current screen: ${provider.currentScreen}');
+                    print('Previous screen: $previousScreen');
+                    print('Navigating to: $previousScreen');
+                    try {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, previousScreen, (route) => false);
+                      print('Navigation successful');
+                    } catch (e) {
+                      print('Navigation failed: $e');
+                    }
+                  },
                 )
               : Padding(
                   padding: const EdgeInsets.only(left: 12),

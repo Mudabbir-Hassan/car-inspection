@@ -74,31 +74,17 @@ class HassanMotorsInspectionApp extends StatelessWidget {
           '/splash': (context) => const SplashScreen(),
           '/': (context) => const WelcomeScreen(),
           '/instructions': (context) => const InstructionScreen(),
-          '/car-top': (context) => CarImageScreen(
-                imagePath: 'assets/images/top.png',
-                nextRoute: '/car-left',
-                subtitle: 'Top View',
-              ),
-          '/car-left': (context) => CarImageScreen(
-                imagePath: 'assets/images/left.png',
-                nextRoute: '/car-right',
-                subtitle: 'Left Side',
-              ),
-          '/car-right': (context) => CarImageScreen(
-                imagePath: 'assets/images/right.png',
-                nextRoute: '/car-front',
-                subtitle: 'Right Side',
-              ),
-          '/car-front': (context) => CarImageScreen(
-                imagePath: 'assets/images/front.png',
-                nextRoute: '/car-back',
-                subtitle: 'Front View',
-              ),
-          '/car-back': (context) => CarImageScreen(
-                imagePath: 'assets/images/back.png',
-                nextRoute: '/summary',
-                subtitle: 'Back View',
-              ),
+          '/car-image': (context) {
+            final args = ModalRoute.of(context)?.settings.arguments
+                as Map<String, dynamic>?;
+            final isPopup = args?['isPopup'] ?? false;
+            return CarImageScreen(
+              imagePath: 'assets/images/car-image.jpeg',
+              nextRoute: '/summary',
+              subtitle: 'Car Image',
+              isPopup: isPopup,
+            );
+          },
           '/ownership': (context) => const OwnershipScreen(),
           '/exterior': (context) => const ExteriorScreen(),
           '/legal': (context) => const TokenTaxScreen(),

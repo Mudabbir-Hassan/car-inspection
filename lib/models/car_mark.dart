@@ -5,13 +5,46 @@ class CarMark {
   final Color color;
   final String imagePath;
   final String viewName;
+  final double? imageWidth;
+  final double? imageHeight;
+  final double? imageOffsetX;
+  final double? imageOffsetY;
+  final double? imageActualWidth;
+  final double? imageActualHeight;
 
   CarMark({
     required this.position,
     required this.color,
     required this.imagePath,
     required this.viewName,
+    this.imageWidth,
+    this.imageHeight,
+    this.imageOffsetX,
+    this.imageOffsetY,
+    this.imageActualWidth,
+    this.imageActualHeight,
   });
+
+  // Get position as percentage (0.0 to 1.0)
+  Offset get positionAsPercentage {
+    // Use the actual position as percentage since we're now saving as percentages
+    return position;
+  }
+
+  // Create mark from percentage position
+  factory CarMark.fromPercentage({
+    required Offset percentagePosition,
+    required Color color,
+    required String imagePath,
+    required String viewName,
+  }) {
+    return CarMark(
+      position: percentagePosition,
+      color: color,
+      imagePath: imagePath,
+      viewName: viewName,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -19,6 +52,12 @@ class CarMark {
       'color': color.value,
       'imagePath': imagePath,
       'viewName': viewName,
+      'imageWidth': imageWidth,
+      'imageHeight': imageHeight,
+      'imageOffsetX': imageOffsetX,
+      'imageOffsetY': imageOffsetY,
+      'imageActualWidth': imageActualWidth,
+      'imageActualHeight': imageActualHeight,
     };
   }
 
@@ -28,6 +67,12 @@ class CarMark {
       color: Color(json['color']),
       imagePath: json['imagePath'],
       viewName: json['viewName'],
+      imageWidth: json['imageWidth'],
+      imageHeight: json['imageHeight'],
+      imageOffsetX: json['imageOffsetX'],
+      imageOffsetY: json['imageOffsetY'],
+      imageActualWidth: json['imageActualWidth'],
+      imageActualHeight: json['imageActualHeight'],
     );
   }
 }

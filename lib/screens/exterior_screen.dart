@@ -186,196 +186,199 @@ class _ExteriorScreenState extends State<ExteriorScreen>
             ),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                const ProgressSteps(
-                  currentStep: 1,
-                  steps: [
-                    'Ownership',
-                    'Condition',
-                    'Legal',
-                    'Instructions',
-                    'Images',
-                    'Summary'
-                  ],
-                ),
-                const SizedBox(height: 12),
-                FadeTransition(
-                  opacity: _fadeAnim,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.teal.withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.lightbulb, color: Color(0xFF00BFA6)),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            'Rate each component from 0% to 100%. Higher percentages indicate better condition. 🚗',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ],
-                    ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: [
+                  const ProgressSteps(
+                    currentStep: 1,
+                    steps: [
+                      'Ownership',
+                      'Condition',
+                      'Legal',
+                      'Instructions',
+                      'Images',
+                      'Summary'
+                    ],
                   ),
-                ),
-                const TitleText('Vehicle Condition Assessment', fontSize: 20),
-                const SizedBox(height: 16),
-                ...List.generate(_conditionItems.length, (i) {
-                  final item = _conditionItems[i];
-                  final currentValue = _conditionScores[item['key']] ?? 50.0;
-
-                  return FadeTransition(
+                  const SizedBox(height: 12),
+                  FadeTransition(
                     opacity: _fadeAnim,
                     child: Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.grey[800],
+                        color: Colors.teal.withOpacity(0.08),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey[700]!),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                item['icon'],
-                                color: const Color(0xFF00BFA6),
-                                size: 24,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      item['label'],
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      item['description'],
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey[400],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '0%',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey[400],
-                                ),
-                              ),
-                              Text(
-                                '${currentValue.round()}%',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: _getConditionColor(currentValue),
-                                ),
-                              ),
-                              Text(
-                                '100%',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey[400],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          SliderTheme(
-                            data: SliderTheme.of(context).copyWith(
-                              activeTrackColor:
-                                  _getConditionColor(currentValue),
-                              inactiveTrackColor: Colors.grey[600],
-                              thumbColor: _getConditionColor(currentValue),
-                              overlayColor: _getConditionColor(currentValue)
-                                  .withOpacity(0.2),
-                              trackHeight: 6,
-                              thumbShape: const RoundSliderThumbShape(
-                                  enabledThumbRadius: 12),
-                              overlayShape: const RoundSliderOverlayShape(
-                                  overlayRadius: 24),
-                            ),
-                            child: Slider(
-                              value: currentValue,
-                              min: 0,
-                              max: 100,
-                              divisions: 100,
-                              onChanged: (value) {
-                                setState(() {
-                                  _conditionScores[item['key']] = value;
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Center(
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
-                              decoration: BoxDecoration(
-                                color: _getConditionColor(currentValue)
-                                    .withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                    color: _getConditionColor(currentValue)),
-                              ),
-                              child: Text(
-                                _getConditionText(currentValue),
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: _getConditionColor(currentValue),
-                                ),
-                              ),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.lightbulb, color: Color(0xFF00BFA6)),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Rate each component from 0% to 100%. Higher percentages indicate better condition. 🚗',
+                              style: TextStyle(fontSize: 14),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  );
-                }),
-                const SizedBox(height: 24),
-                PrimaryButton(
-                  label: 'Next: Legal Details',
-                  onPressed: () {
-                    _saveData();
-                    final provider =
-                        Provider.of<InspectionProvider>(context, listen: false);
-                    provider.updateCurrentScreen('/legal');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TokenTaxScreen(),
+                  ),
+                  const TitleText('Vehicle Condition Assessment', fontSize: 20),
+                  const SizedBox(height: 16),
+                  ...List.generate(_conditionItems.length, (i) {
+                    final item = _conditionItems[i];
+                    final currentValue = _conditionScores[item['key']] ?? 50.0;
+
+                    return FadeTransition(
+                      opacity: _fadeAnim,
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 20),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[800],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey[700]!),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  item['icon'],
+                                  color: const Color(0xFF00BFA6),
+                                  size: 24,
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item['label'],
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        item['description'],
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '0%',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
+                                Text(
+                                  '${currentValue.round()}%',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: _getConditionColor(currentValue),
+                                  ),
+                                ),
+                                Text(
+                                  '100%',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                activeTrackColor:
+                                    _getConditionColor(currentValue),
+                                inactiveTrackColor: Colors.grey[600],
+                                thumbColor: _getConditionColor(currentValue),
+                                overlayColor: _getConditionColor(currentValue)
+                                    .withOpacity(0.2),
+                                trackHeight: 6,
+                                thumbShape: const RoundSliderThumbShape(
+                                    enabledThumbRadius: 12),
+                                overlayShape: const RoundSliderOverlayShape(
+                                    overlayRadius: 24),
+                              ),
+                              child: Slider(
+                                value: currentValue,
+                                min: 0,
+                                max: 100,
+                                divisions: 100,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _conditionScores[item['key']] = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Center(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: _getConditionColor(currentValue)
+                                      .withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                      color: _getConditionColor(currentValue)),
+                                ),
+                                child: Text(
+                                  _getConditionText(currentValue),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: _getConditionColor(currentValue),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
-                  },
-                ),
-              ],
+                  }),
+                  const SizedBox(height: 24),
+                  PrimaryButton(
+                    label: 'Next: Legal Details',
+                    onPressed: () {
+                      _saveData();
+                      final provider = Provider.of<InspectionProvider>(context,
+                          listen: false);
+                      provider.updateCurrentScreen('/legal');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TokenTaxScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

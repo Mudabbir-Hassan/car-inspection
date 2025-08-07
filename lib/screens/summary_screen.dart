@@ -103,7 +103,7 @@ class SummaryScreen extends StatelessWidget {
                   ),
                   pw.SizedBox(height: 10),
                   pw.Text(
-                    'COMPREHENSIVE VEHICLE INSPECTION REPORT',
+                'COMPREHENSIVE VEHICLE INSPECTION REPORT',
                     style: pw.TextStyle(
                       fontSize: 18,
                       fontWeight: pw.FontWeight.bold,
@@ -143,33 +143,33 @@ class SummaryScreen extends StatelessWidget {
                     ),
                   ),
                   pw.SizedBox(height: 15),
-                  ..._allQuestions.entries
-                      .where((e) => [
-                            'ownerName',
-                            'contact',
-                            'cnic',
-                            'yearManufacturing',
-                            'yearImport',
-                            'yearRegistration',
-                            'make',
-                            'model',
-                            'type',
-                            'carName',
-                            'customerDealerName',
-                            'engineCapacity',
-                            'mileage',
-                            'fuelType',
-                            'inspectionDate',
-                            'chassis',
-                            'engine',
-                            'registration',
-                            'previousOwners'
-                          ].contains(e.key))
-                      .map((e) => pw.Container(
-                            margin: const pw.EdgeInsets.only(bottom: 8),
-                            child: pw.Row(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
-                              children: [
+            ..._allQuestions.entries
+                .where((e) => [
+                      'ownerName',
+                      'contact',
+                      'cnic',
+                      'yearManufacturing',
+                      'yearImport',
+                      'yearRegistration',
+                      'make',
+                      'model',
+                      'type',
+                      'carName',
+                      'customerDealerName',
+                      'engineCapacity',
+                      'mileage',
+                      'fuelType',
+                      'inspectionDate',
+                      'chassis',
+                      'engine',
+                      'registration',
+                      'previousOwners'
+                    ].contains(e.key))
+                .map((e) => pw.Container(
+                      margin: const pw.EdgeInsets.only(bottom: 8),
+                      child: pw.Row(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
                                 pw.Text(
                                   '${e.value}: ',
                                   style: pw.TextStyle(
@@ -178,15 +178,15 @@ class SummaryScreen extends StatelessWidget {
                                     color: PdfColors.grey800,
                                   ),
                                 ),
-                                pw.Expanded(
+                          pw.Expanded(
                                   child: pw.Text(
                                     _getAnswer(e.key, answers),
                                     style: pw.TextStyle(fontSize: 12),
                                   ),
-                                ),
-                              ],
-                            ),
-                          )),
+                          ),
+                        ],
+                      ),
+                    )),
                 ],
               ),
             ),
@@ -195,7 +195,7 @@ class SummaryScreen extends StatelessWidget {
       ),
     );
 
-    // Page 2: Legal & Tax Details
+    // Page 2: Legal & Tax Details + Vehicle Condition & Inspection
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
@@ -203,7 +203,6 @@ class SummaryScreen extends StatelessWidget {
         build: (context) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            // Header
             pw.Container(
               padding: const pw.EdgeInsets.all(15),
               decoration: pw.BoxDecoration(
@@ -219,7 +218,7 @@ class SummaryScreen extends StatelessWidget {
                 ),
               ),
             ),
-            pw.SizedBox(height: 20),
+            pw.SizedBox(height: 15),
             pw.Container(
               padding: const pw.EdgeInsets.all(15),
               decoration: pw.BoxDecoration(
@@ -229,52 +228,42 @@ class SummaryScreen extends StatelessWidget {
               ),
               child: pw.Column(
                 children: [
-                  ..._allQuestions.entries
-                      .where((e) => [
-                            'challans',
-                            'tokenTax',
-                            'ciaClearance',
-                            'biometricVerification'
-                          ].contains(e.key))
-                      .map((e) => pw.Container(
-                            margin: const pw.EdgeInsets.only(bottom: 12),
-                            child: pw.Row(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
-                              children: [
+            ..._allQuestions.entries
+                .where((e) => [
+                      'challans',
+                      'tokenTax',
+                      'ciaClearance',
+                      'biometricVerification'
+                    ].contains(e.key))
+                .map((e) => pw.Container(
+                            margin: const pw.EdgeInsets.only(bottom: 8),
+                      child: pw.Row(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
                                 pw.Text(
                                   '${e.value}: ',
                                   style: pw.TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: pw.FontWeight.bold,
                                     color: PdfColors.grey800,
                                   ),
                                 ),
-                                pw.Expanded(
+                          pw.Expanded(
                                   child: pw.Text(
                                     _getAnswer(e.key, answers),
-                                    style: pw.TextStyle(fontSize: 14),
+                                    style: pw.TextStyle(fontSize: 12),
                                   ),
-                                ),
-                              ],
-                            ),
-                          )),
-                ],
-              ),
-            ),
+                          ),
+                        ],
+                      ),
+                    )),
           ],
         ),
       ),
-    );
 
-    // Page 3: Vehicle Condition & Inspection
-    pdf.addPage(
-      pw.Page(
-        pageFormat: PdfPageFormat.a4,
-        margin: const pw.EdgeInsets.all(30),
-        build: (context) => pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            // Header
+            pw.SizedBox(height: 20),
+
+            // Vehicle Condition & Inspection Section
             pw.Container(
               padding: const pw.EdgeInsets.all(15),
               decoration: pw.BoxDecoration(
@@ -290,7 +279,7 @@ class SummaryScreen extends StatelessWidget {
                 ),
               ),
             ),
-            pw.SizedBox(height: 20),
+            pw.SizedBox(height: 15),
             pw.Container(
               padding: const pw.EdgeInsets.all(15),
               decoration: pw.BoxDecoration(
@@ -300,39 +289,39 @@ class SummaryScreen extends StatelessWidget {
               ),
               child: pw.Column(
                 children: [
-                  ..._allQuestions.entries
-                      .where((e) => [
-                            'engineTransmissionClutch',
-                            'brakes',
-                            'suspensionSteering',
-                            'interiorCondition',
-                            'acHeater',
-                            'electricalElectronics',
-                            'exteriorBody',
-                            'tyresCondition'
+            ..._allQuestions.entries
+                .where((e) => [
+                      'engineTransmissionClutch',
+                      'brakes',
+                      'suspensionSteering',
+                      'interiorCondition',
+                      'acHeater',
+                      'electricalElectronics',
+                      'exteriorBody',
+                      'tyresCondition'
                           ].contains(e.key))
-                      .map((e) => pw.Container(
-                            margin: const pw.EdgeInsets.only(bottom: 12),
-                            child: pw.Row(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
-                              children: [
+                .map((e) => pw.Container(
+                            margin: const pw.EdgeInsets.only(bottom: 8),
+                      child: pw.Row(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
                                 pw.Text(
                                   '${e.value}: ',
                                   style: pw.TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: pw.FontWeight.bold,
                                     color: PdfColors.grey800,
                                   ),
                                 ),
-                                pw.Expanded(
+                          pw.Expanded(
                                   child: pw.Text(
                                     _getAnswer(e.key, answers),
-                                    style: pw.TextStyle(fontSize: 14),
+                                    style: pw.TextStyle(fontSize: 12),
                                   ),
-                                ),
-                              ],
-                            ),
-                          )),
+                          ),
+                        ],
+                      ),
+                    )),
                 ],
               ),
             ),
@@ -341,7 +330,7 @@ class SummaryScreen extends StatelessWidget {
       ),
     );
 
-    // Page 4: Car Images with Markings
+    // Page 3: Car Images with Markings
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
@@ -386,12 +375,12 @@ class SummaryScreen extends StatelessWidget {
                       color: PdfColors.grey800,
                     ),
                   ),
-                  pw.SizedBox(height: 10),
-                  pw.Text(
+            pw.SizedBox(height: 10),
+            pw.Text(
                     'Total marks: ${carMarks.length}',
                     style: pw.TextStyle(fontSize: 14),
                   ),
-                  pw.Text(
+            pw.Text(
                     'Yellow highlights: ${carMarks.where((m) => m.color == Colors.yellow).length}',
                     style: pw.TextStyle(fontSize: 14),
                   ),
@@ -464,49 +453,50 @@ class SummaryScreen extends StatelessWidget {
         // Update current screen to summary when reaching this screen
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (provider.currentScreen != '/summary') {
-            provider.updateCurrentScreen('/summary');
+          provider.updateCurrentScreen('/summary');
             print('SummaryScreen: Updated current screen to /summary');
           }
         });
 
         return Scaffold(
           appBar: _SummaryAppBar(),
-          body: Padding(
+          body: SafeArea(
+            child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: ListView(
               children: [
-                // Progress Steps
-                const ProgressSteps(
-                  currentStep: 5,
-                  steps: [
-                    'Ownership',
-                    'Condition',
-                    'Legal',
-                    'Instructions',
-                    'Images',
-                    'Summary'
-                  ],
-                ),
-                const SizedBox(height: 16),
+                  // Progress Steps
+                  const ProgressSteps(
+                    currentStep: 5,
+                    steps: [
+                      'Ownership',
+                      'Condition',
+                      'Legal',
+                      'Instructions',
+                      'Images',
+                      'Summary'
+                    ],
+                  ),
+                  const SizedBox(height: 16),
                 const Text(
                   'Review your inspection:',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
 
-                // Car Image Section
+                  // Car Image Section
                 const Text(
-                  'Car Image with Markings:',
+                    'Car Image with Markings:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
                 SizedBox(
-                  height: 200,
-                  child: _MarkedImageCard(
-                      'Car Image',
-                      'assets/images/car-image.jpeg',
-                      _getMarksForImage(
-                          'assets/images/car-image.jpeg', carMarks)),
+                    height: 200,
+                    child: _MarkedImageCard(
+                        'Car Image',
+                        'assets/images/car-image.jpeg',
+                          _getMarksForImage(
+                            'assets/images/car-image.jpeg', carMarks)),
                 ),
 
                 const SizedBox(height: 24),
@@ -584,6 +574,7 @@ class SummaryScreen extends StatelessWidget {
                   },
                 ),
               ],
+              ),
             ),
           ),
         );
@@ -750,15 +741,15 @@ class SummaryScreen extends StatelessWidget {
             return pw.Positioned(
               left: scaledX - 12, // Same offset as car image screen
               top: scaledY - 12,
-              child: pw.Container(
+                child: pw.Container(
                 width: 24, // Same size as car image screen
                 height: 24,
-                decoration: pw.BoxDecoration(
+                  decoration: pw.BoxDecoration(
                   color: PdfColors.yellow,
-                  shape: pw.BoxShape.circle,
+                    shape: pw.BoxShape.circle,
                   border: pw.Border.all(color: PdfColors.black, width: 2),
+                  ),
                 ),
-              ),
             );
           }),
           // Title overlay
@@ -947,7 +938,7 @@ class _MarkedImageCard extends StatelessWidget {
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(8)),
                 child: Image.asset(imagePath,
-                    fit: BoxFit.cover, width: double.infinity),
+                        fit: BoxFit.cover, width: double.infinity),
               ),
             ),
             Container(

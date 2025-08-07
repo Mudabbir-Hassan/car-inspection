@@ -114,9 +114,9 @@ class _CarImageScreenState extends State<CarImageScreen> {
                 centerTitle: true,
               )
             : CustomAppBar(
-                title: 'Mark Car Image',
-                subtitle: widget.subtitle,
-                showBack: true,
+          title: 'Mark Car Image',
+          subtitle: widget.subtitle,
+          showBack: true,
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -133,59 +133,67 @@ class _CarImageScreenState extends State<CarImageScreen> {
                   ),
                 ],
               ),
-        body: Padding(
+        body: SafeArea(
+          child: Padding(
           padding: EdgeInsets.all(isSmallScreen ? 8.0 : 12.0),
           child: Column(
             children: [
-              // Tool buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: _HighlighterButton(
-                      color: Colors.yellow,
-                      label: 'Highlight',
-                      selected: _selectedColor == Colors.yellow,
-                      onTap: () =>
-                          setState(() => _selectedColor = Colors.yellow),
-                      isSmallScreen: isSmallScreen,
-                    ),
+                // Tool buttons with responsive spacing
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isSmallScreen ? 4.0 : 8.0,
+                    vertical: isSmallScreen ? 8.0 : 12.0,
                   ),
-                  SizedBox(width: isSmallScreen ? 8.0 : 12.0),
-                  Expanded(
-                    child: _RemoveButton(
-                      onTap: () {
-                        if (_marks.isNotEmpty) {
-                          setState(() {
-                            _marks.removeLast();
-                          });
-                          // Save the updated marks to provider immediately
-                          _saveData();
-                        }
-                      },
-                      isSmallScreen: isSmallScreen,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: _HighlighterButton(
+                          color: Colors.yellow,
+                          label: 'Highlight',
+                          selected: _selectedColor == Colors.yellow,
+                          onTap: () =>
+                              setState(() => _selectedColor = Colors.yellow),
+                          isSmallScreen: isSmallScreen,
+                        ),
+                      ),
+                      SizedBox(width: isSmallScreen ? 6.0 : 10.0),
+                      Expanded(
+                        child: _RemoveButton(
+                          onTap: () {
+                            if (_marks.isNotEmpty) {
+                              setState(() {
+                                _marks.removeLast();
+                              });
+                              // Save the updated marks to provider immediately
+                              _saveData();
+                            }
+                          },
+                          isSmallScreen: isSmallScreen,
+                        ),
+                      ),
+                      SizedBox(width: isSmallScreen ? 6.0 : 10.0),
+                      Expanded(
+                        child: _ClearAllButton(
+                          onTap: () {
+                            if (_marks.isNotEmpty) {
+                              setState(() {
+                                _marks.clear();
+                              });
+                              // Save the updated marks to provider immediately
+                              _saveData();
+                            }
+                          },
+                    isSmallScreen: isSmallScreen,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: isSmallScreen ? 8.0 : 12.0),
-                  Expanded(
-                    child: _ClearAllButton(
-                      onTap: () {
-                        if (_marks.isNotEmpty) {
-                          setState(() {
-                            _marks.clear();
-                          });
-                          // Save the updated marks to provider immediately
-                          _saveData();
-                        }
-                      },
-                      isSmallScreen: isSmallScreen,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: isSmallScreen ? 8.0 : 12.0),
-              // Responsive image container
-              Expanded(
+                ),
+                SizedBox(height: isSmallScreen ? 6.0 : 10.0),
+                // Responsive image container with flexible height
+                Flexible(
+                  flex: 1,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -200,36 +208,37 @@ class _CarImageScreenState extends State<CarImageScreen> {
                       builder: (context, constraints) {
                         return GestureDetector(
                           onTapDown: (details) {
-                            // Calculate exact image bounds for BoxFit.contain
-                            final containerWidth = constraints.maxWidth;
-                            final containerHeight = constraints.maxHeight;
-                            final tapPosition = details.localPosition;
+                              // Calculate exact image bounds for BoxFit.contain
+                              final containerWidth = constraints.maxWidth;
+                              final containerHeight = constraints.maxHeight;
+                              final tapPosition = details.localPosition;
 
-                            // Simple percentage-based positioning
-                            final percentageX = tapPosition.dx / containerWidth;
-                            final percentageY =
-                                tapPosition.dy / containerHeight;
+                              // Simple percentage-based positioning
+                              final percentageX =
+                                  tapPosition.dx / containerWidth;
+                              final percentageY =
+                                  tapPosition.dy / containerHeight;
 
-                            print(
-                                'Tap position: ${tapPosition.dx}, ${tapPosition.dy}');
-                            print(
-                                'Container size: ${containerWidth} x ${containerHeight}');
-                            print(
-                                'Percentage position: ${percentageX}, ${percentageY}');
+                              print(
+                                  'Tap position: ${tapPosition.dx}, ${tapPosition.dy}');
+                              print(
+                                  'Container size: ${containerWidth} x ${containerHeight}');
+                              print(
+                                  'Percentage position: ${percentageX}, ${percentageY}');
 
-                            // Create mark with simple percentage positioning
-                            final mark = CarMark(
-                              position: Offset(percentageX, percentageY),
-                              color: _selectedColor,
-                              imagePath: widget.imagePath,
-                              viewName: widget.subtitle,
-                              imageWidth: containerWidth,
-                              imageHeight: containerHeight,
-                            );
+                              // Create mark with simple percentage positioning
+                              final mark = CarMark(
+                                position: Offset(percentageX, percentageY),
+                                color: _selectedColor,
+                                imagePath: widget.imagePath,
+                                viewName: widget.subtitle,
+                                imageWidth: containerWidth,
+                                imageHeight: containerHeight,
+                              );
 
-                            setState(() {
-                              _marks.add(mark);
-                            });
+                              setState(() {
+                                _marks.add(mark);
+                              });
                           },
                           child: Stack(
                             children: [
@@ -246,30 +255,31 @@ class _CarImageScreenState extends State<CarImageScreen> {
                                 final markSize = isSmallScreen ? 16.0 : 24.0;
                                 final offset = isSmallScreen ? 8.0 : 12.0;
 
-                                // Simple percentage-based positioning
-                                final scaledX =
-                                    m.position.dx * constraints.maxWidth;
-                                final scaledY =
-                                    m.position.dy * constraints.maxHeight;
+                                  // Simple percentage-based positioning
+                                  final scaledX =
+                                      m.position.dx * constraints.maxWidth;
+                                  final scaledY =
+                                      m.position.dy * constraints.maxHeight;
 
-                                print(
-                                    'Mark percentage: ${m.position.dx}, ${m.position.dy}');
-                                print('Final position: ${scaledX}, ${scaledY}');
+                                  print(
+                                      'Mark percentage: ${m.position.dx}, ${m.position.dy}');
+                                  print(
+                                      'Final position: ${scaledX}, ${scaledY}');
 
                                 return Positioned(
-                                  left: scaledX - offset,
-                                  top: scaledY - offset,
-                                  child: Container(
-                                    width: markSize,
-                                    height: markSize,
-                                    decoration: BoxDecoration(
-                                      color: m.color.withOpacity(0.3),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: m.color.withOpacity(0.8),
-                                        width: 2,
+                                    left: scaledX - offset,
+                                    top: scaledY - offset,
+                                    child: Container(
+                                      width: markSize,
+                                      height: markSize,
+                                      decoration: BoxDecoration(
+                                        color: m.color.withOpacity(0.3),
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: m.color.withOpacity(0.8),
+                                          width: 2,
+                                        ),
                                       ),
-                                    ),
                                   ),
                                 );
                               }),
@@ -287,13 +297,15 @@ class _CarImageScreenState extends State<CarImageScreen> {
                   label: 'Next Image',
                   onPressed: () {
                     _saveData();
-                    final provider =
-                        Provider.of<InspectionProvider>(context, listen: false);
-                    provider.updateCurrentScreen(widget.nextRoute!);
-                    Navigator.pushReplacementNamed(context, widget.nextRoute!);
+                      final provider = Provider.of<InspectionProvider>(context,
+                          listen: false);
+                      provider.updateCurrentScreen(widget.nextRoute!);
+                      Navigator.pushReplacementNamed(
+                          context, widget.nextRoute!);
                   },
                 ),
             ],
+            ),
           ),
         ),
       ),
@@ -322,8 +334,8 @@ class _HighlighterButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: isSmallScreen ? 12.0 : 18.0,
-          vertical: isSmallScreen ? 8.0 : 10.0,
+          horizontal: isSmallScreen ? 8.0 : 12.0,
+          vertical: isSmallScreen ? 6.0 : 8.0,
         ),
         decoration: BoxDecoration(
           color: selected ? color.withOpacity(0.2) : Colors.transparent,
@@ -344,7 +356,7 @@ class _HighlighterButton extends StatelessWidget {
               style: TextStyle(
                 color: color,
                 fontWeight: FontWeight.bold,
-                fontSize: isSmallScreen ? 12.0 : 14.0,
+                fontSize: isSmallScreen ? 10.0 : 12.0,
               ),
             ),
           ],
@@ -369,8 +381,8 @@ class _ClearAllButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: isSmallScreen ? 12.0 : 18.0,
-          vertical: isSmallScreen ? 8.0 : 10.0,
+          horizontal: isSmallScreen ? 8.0 : 12.0,
+          vertical: isSmallScreen ? 6.0 : 8.0,
         ),
         decoration: BoxDecoration(
           color: Colors.orange.withOpacity(0.1),
@@ -387,11 +399,11 @@ class _ClearAllButton extends StatelessWidget {
             ),
             SizedBox(width: isSmallScreen ? 4.0 : 6.0),
             Text(
-              'Clear All',
+              'Clear',
               style: TextStyle(
                 color: Colors.orange,
                 fontWeight: FontWeight.bold,
-                fontSize: isSmallScreen ? 12.0 : 14.0,
+                fontSize: isSmallScreen ? 10.0 : 12.0,
               ),
             ),
           ],
@@ -416,8 +428,8 @@ class _RemoveButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: isSmallScreen ? 12.0 : 18.0,
-          vertical: isSmallScreen ? 8.0 : 10.0,
+          horizontal: isSmallScreen ? 8.0 : 12.0,
+          vertical: isSmallScreen ? 6.0 : 8.0,
         ),
         decoration: BoxDecoration(
           color: Colors.red.withOpacity(0.1),
@@ -438,7 +450,7 @@ class _RemoveButton extends StatelessWidget {
               style: TextStyle(
                 color: Colors.red,
                 fontWeight: FontWeight.bold,
-                fontSize: isSmallScreen ? 12.0 : 14.0,
+                fontSize: isSmallScreen ? 10.0 : 12.0,
               ),
             ),
           ],

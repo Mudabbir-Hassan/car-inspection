@@ -149,83 +149,85 @@ class _TokenTaxScreenState extends State<TokenTaxScreen>
             ),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                const ProgressSteps(
-                  currentStep: 2,
-                  steps: [
-                    'Ownership',
-                    'Condition',
-                    'Legal',
-                    'Instructions',
-                    'Images',
-                    'Summary'
-                  ],
-                ),
-                const SizedBox(height: 12),
-                FadeTransition(
-                  opacity: _fadeAnim,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.teal.withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.lightbulb, color: Color(0xFF00BFA6)),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            'Tip: Legal and tax details ensure your car is clear for sale or transfer. 📝',
-                            style: TextStyle(fontSize: 14),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: [
+                  const ProgressSteps(
+                    currentStep: 2,
+                    steps: [
+                      'Ownership',
+                      'Condition',
+                      'Legal',
+                      'Instructions',
+                      'Images',
+                      'Summary'
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  FadeTransition(
+                    opacity: _fadeAnim,
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.teal.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.lightbulb, color: Color(0xFF00BFA6)),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Tip: Legal and tax details ensure your car is clear for sale or transfer. 📝',
+                              style: TextStyle(fontSize: 14),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const TitleText('Token Tax & Legal', fontSize: 20),
-                const SizedBox(height: 16),
-                ...List.generate(_questions.length, (i) {
-                  return FadeTransition(
-                    opacity: _fadeAnim,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: TextFormField(
-                        controller: _controllers[_questions[i]['key']],
-                        decoration: InputDecoration(
-                          labelText: _questions[i]['label'],
-                          prefixIcon: Icon(_questions[i]['icon'],
-                              color: Theme.of(context).colorScheme.secondary),
-                          hintText: _questions[i]['hint'],
-                          helperText: _questions[i]['hint'],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
+                  const TitleText('Token Tax & Legal', fontSize: 20),
+                  const SizedBox(height: 16),
+                  ...List.generate(_questions.length, (i) {
+                    return FadeTransition(
+                      opacity: _fadeAnim,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: TextFormField(
+                          controller: _controllers[_questions[i]['key']],
+                          decoration: InputDecoration(
+                            labelText: _questions[i]['label'],
+                            prefixIcon: Icon(_questions[i]['icon'],
+                                color: Theme.of(context).colorScheme.secondary),
+                            hintText: _questions[i]['hint'],
+                            helperText: _questions[i]['hint'],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                }),
-                const SizedBox(height: 24),
-                PrimaryButton(
-                  label: 'Next: Instructions',
-                  onPressed: () {
-                    _saveData();
-                    final provider =
-                        Provider.of<InspectionProvider>(context, listen: false);
-                    provider.updateCurrentScreen('/instructions');
-                    Navigator.pushReplacementNamed(context, '/instructions');
-                  },
-                ),
-              ],
+                    );
+                  }),
+                  const SizedBox(height: 24),
+                  PrimaryButton(
+                    label: 'Next: Instructions',
+                    onPressed: () {
+                      _saveData();
+                      final provider = Provider.of<InspectionProvider>(context,
+                          listen: false);
+                      provider.updateCurrentScreen('/instructions');
+                      Navigator.pushReplacementNamed(context, '/instructions');
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

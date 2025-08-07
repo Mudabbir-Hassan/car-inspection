@@ -28,6 +28,7 @@ class HassanMotorsInspectionApp extends StatelessWidget {
       },
       child: MaterialApp(
         title: 'Hassan Motors Inspection',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.dark,
           colorScheme: ColorScheme.fromSeed(

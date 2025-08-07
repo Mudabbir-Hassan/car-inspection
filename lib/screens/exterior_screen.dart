@@ -84,24 +84,20 @@ class _ExteriorScreenState extends State<ExteriorScreen>
         CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
     _animationController.forward();
 
-    // Update current screen immediately when initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<InspectionProvider>(context, listen: false);
       provider.updateCurrentScreen('/exterior');
       print('ExteriorScreen: Updated current screen to /exterior in initState');
     });
 
-    // Initialize all scores to 50%
     for (var item in _conditionItems) {
       _conditionScores[item['key']] = 50.0;
     }
 
-    // Load existing data from provider
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<InspectionProvider>(context, listen: false);
       final existingAnswers = provider.formAnswers;
 
-      // Load condition scores from existing answers
       for (var item in _conditionItems) {
         final key = item['key'];
         if (existingAnswers.containsKey(key)) {
@@ -135,7 +131,6 @@ class _ExteriorScreenState extends State<ExteriorScreen>
     return Colors.red.shade900;
   }
 
-  // Save data automatically when leaving the screen
   void _saveData() {
     if (_formKey.currentState != null) {
       _formKey.currentState!.save();
@@ -148,7 +143,6 @@ class _ExteriorScreenState extends State<ExteriorScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Ensure current screen is set when building
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<InspectionProvider>(context, listen: false);
       if (provider.currentScreen != '/exterior') {

@@ -31,7 +31,6 @@ class _CarImageScreenState extends State<CarImageScreen> {
   void initState() {
     super.initState();
 
-    // Update current screen immediately when initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<InspectionProvider>(context, listen: false);
       final currentRoute =
@@ -40,7 +39,6 @@ class _CarImageScreenState extends State<CarImageScreen> {
       print(
           'CarImageScreen: Updated current screen to $currentRoute in initState');
 
-      // Load existing marks for this image
       final existingMarks = provider.carMarks;
       final marksForThisImage = existingMarks
           .where((mark) => mark.imagePath == widget.imagePath)
@@ -70,7 +68,6 @@ class _CarImageScreenState extends State<CarImageScreen> {
     final provider = Provider.of<InspectionProvider>(context, listen: false);
     final existingMarks = provider.carMarks;
 
-    // Remove existing marks for this image and add current marks
     final marksForOtherImages = existingMarks
         .where((mark) => mark.imagePath != widget.imagePath)
         .toList();
@@ -138,7 +135,6 @@ class _CarImageScreenState extends State<CarImageScreen> {
           padding: EdgeInsets.all(isSmallScreen ? 8.0 : 12.0),
           child: Column(
             children: [
-                // Tool buttons with responsive spacing
                 Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: isSmallScreen ? 4.0 : 8.0,
@@ -165,7 +161,6 @@ class _CarImageScreenState extends State<CarImageScreen> {
                               setState(() {
                                 _marks.removeLast();
                               });
-                              // Save the updated marks to provider immediately
                               _saveData();
                             }
                           },
@@ -180,7 +175,6 @@ class _CarImageScreenState extends State<CarImageScreen> {
                               setState(() {
                                 _marks.clear();
                               });
-                              // Save the updated marks to provider immediately
                               _saveData();
                             }
                           },
@@ -191,7 +185,6 @@ class _CarImageScreenState extends State<CarImageScreen> {
                   ),
                 ),
                 SizedBox(height: isSmallScreen ? 6.0 : 10.0),
-                // Responsive image container with flexible height
                 Flexible(
                   flex: 1,
                 child: Container(
@@ -208,12 +201,10 @@ class _CarImageScreenState extends State<CarImageScreen> {
                       builder: (context, constraints) {
                         return GestureDetector(
                           onTapDown: (details) {
-                              // Calculate exact image bounds for BoxFit.contain
                               final containerWidth = constraints.maxWidth;
                               final containerHeight = constraints.maxHeight;
                               final tapPosition = details.localPosition;
 
-                              // Simple percentage-based positioning
                               final percentageX =
                                   tapPosition.dx / containerWidth;
                               final percentageY =
@@ -226,7 +217,6 @@ class _CarImageScreenState extends State<CarImageScreen> {
                               print(
                                   'Percentage position: ${percentageX}, ${percentageY}');
 
-                              // Create mark with simple percentage positioning
                               final mark = CarMark(
                                 position: Offset(percentageX, percentageY),
                                 color: _selectedColor,
@@ -255,7 +245,6 @@ class _CarImageScreenState extends State<CarImageScreen> {
                                 final markSize = isSmallScreen ? 16.0 : 24.0;
                                 final offset = isSmallScreen ? 8.0 : 12.0;
 
-                                  // Simple percentage-based positioning
                                   final scaledX =
                                       m.position.dx * constraints.maxWidth;
                                   final scaledY =

@@ -25,13 +25,10 @@ class CarMark {
     this.imageActualHeight,
   });
 
-  // Get position as percentage (0.0 to 1.0)
   Offset get positionAsPercentage {
-    // Use the actual position as percentage since we're now saving as percentages
     return position;
   }
 
-  // Create mark from percentage position
   factory CarMark.fromPercentage({
     required Offset percentagePosition,
     required Color color,

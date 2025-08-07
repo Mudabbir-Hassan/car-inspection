@@ -79,7 +79,6 @@ class WelcomeScreen extends StatelessWidget {
                               ),
                               SizedBox(height: isSmallScreen ? 32 : 48),
 
-                              // Resume option if there's in-progress data
                               if (provider.hasInProgressData) ...[
                                 Container(
                                   padding:
@@ -192,7 +191,6 @@ class WelcomeScreen extends StatelessWidget {
 
                               SizedBox(height: isSmallScreen ? 16 : 24),
 
-                              // App description
                               Container(
                                 padding:
                                     EdgeInsets.all(isSmallScreen ? 12 : 16),

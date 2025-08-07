@@ -42,7 +42,6 @@ class _SplashScreenState extends State<SplashScreen>
 
     _animationController.forward();
 
-    // Initialize provider and check for in-progress data
     _initializeApp();
   }
 
@@ -76,7 +75,6 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Logo
                     Container(
                       width: 120,
                       height: 120,
@@ -101,7 +99,6 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     const SizedBox(height: 24),
 
-                    // App Name
                     const Text(
                       'Hassan Motors',
                       style: TextStyle(
@@ -113,7 +110,6 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     const SizedBox(height: 8),
 
-                    // Subtitle
                     const Text(
                       'Inspection App',
                       style: TextStyle(
@@ -124,7 +120,6 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     const SizedBox(height: 40),
 
-                    // Loading indicator
                     SizedBox(
                       width: 40,
                       height: 40,
@@ -137,7 +132,6 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     const SizedBox(height: 16),
 
-                    // Loading text
                     const Text(
                       'Loading...',
                       style: TextStyle(

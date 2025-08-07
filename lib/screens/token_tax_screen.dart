@@ -60,27 +60,22 @@ class _TokenTaxScreenState extends State<TokenTaxScreen>
         CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
     _animationController.forward();
 
-    // Update current screen immediately when initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<InspectionProvider>(context, listen: false);
       provider.updateCurrentScreen('/legal');
       print('TokenTaxScreen: Updated current screen to /legal in initState');
     });
 
-    // Initialize controllers for each field
     for (var question in _questions) {
       _controllers[question['key']] = TextEditingController();
     }
 
-    // Load existing data from provider
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<InspectionProvider>(context, listen: false);
       _answers.addAll(provider.formAnswers);
-      // Set initial values for controllers
       for (var question in _questions) {
         _controllers[question['key']]!.text = _answers[question['key']] ?? '';
       }
-      // Update current screen
       provider.updateCurrentScreen('/legal');
       print('TokenTaxScreen: Updated current screen to /legal');
       print('TokenTaxScreen: Current screen is now ${provider.currentScreen}');
@@ -91,16 +86,13 @@ class _TokenTaxScreenState extends State<TokenTaxScreen>
   @override
   void dispose() {
     _animationController.dispose();
-    // Dispose controllers
     for (var controller in _controllers.values) {
       controller.dispose();
     }
     super.dispose();
   }
 
-  // Save data automatically when leaving the screen
   void _saveData() {
-    // Get values from controllers
     for (var question in _questions) {
       _answers[question['key']] = _controllers[question['key']]!.text;
     }
@@ -111,7 +103,6 @@ class _TokenTaxScreenState extends State<TokenTaxScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Ensure current screen is set when building
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<InspectionProvider>(context, listen: false);
       if (provider.currentScreen != '/legal') {

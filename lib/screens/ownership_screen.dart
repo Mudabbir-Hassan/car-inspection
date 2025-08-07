@@ -150,16 +150,13 @@ class _OwnershipScreenState extends State<OwnershipScreen>
         CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
     _animationController.forward();
 
-    // Initialize controllers for each field
     for (var question in _questions) {
       _controllers[question['key']] = TextEditingController();
     }
 
-    // Load existing data from provider
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<InspectionProvider>(context, listen: false);
       _answers.addAll(provider.formAnswers);
-      // Set initial values for controllers
       for (var question in _questions) {
         _controllers[question['key']]!.text = _answers[question['key']] ?? '';
       }
@@ -170,16 +167,13 @@ class _OwnershipScreenState extends State<OwnershipScreen>
   @override
   void dispose() {
     _animationController.dispose();
-    // Dispose controllers
     for (var controller in _controllers.values) {
       controller.dispose();
     }
     super.dispose();
   }
 
-  // Save data automatically when leaving the screen
   void _saveData() {
-    // Get values from controllers
     for (var question in _questions) {
       _answers[question['key']] = _controllers[question['key']]!.text;
     }

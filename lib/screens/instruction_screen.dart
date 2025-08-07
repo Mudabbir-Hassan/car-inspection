@@ -19,7 +19,6 @@ class _InstructionScreenState extends State<InstructionScreen> {
     super.initState();
     print('InstructionScreen: Initialized');
 
-    // Update current screen immediately when initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<InspectionProvider>(context, listen: false);
       provider.updateCurrentScreen('/instructions');
@@ -37,7 +36,6 @@ class _InstructionScreenState extends State<InstructionScreen> {
   Widget build(BuildContext context) {
     print('InstructionScreen: Building instruction screen');
 
-    // Ensure current screen is set when building
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<InspectionProvider>(context, listen: false);
       if (provider.currentScreen != '/instructions') {
@@ -79,7 +77,7 @@ class _InstructionScreenState extends State<InstructionScreen> {
           child: ConstrainedBox(
             constraints: BoxConstraints(
               minHeight:
-                  screenSize.height - 200, // Account for app bar and padding
+                  screenSize.height - 200,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
